@@ -7,9 +7,15 @@ app.use( bodyParser.json() );
 
 module.exports = app;
 
+const createDirectory = require("./functions");
+var _path = createDirectory('POS');
+_path = createDirectory('POS/server');
+_path = createDirectory('POS/server/databases');
+const path = require("path");
+const os = require("os");
  
 let usersDB = new Datastore( {
-    filename: process.env.APPDATA+"/POS/server/databases/users.db",
+    filename: path.join(os.homedir(),".storepos/POS/server/databases/users.db"),
     autoload: true
 } );
 

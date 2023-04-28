@@ -6,10 +6,15 @@ const async = require( "async" );
 const fileUpload = require('express-fileupload');
 const multer = require("multer");
 const fs = require('fs');
+const os = require('os');
 
+const createDirectory = require("./functions");
+var _path = createDirectory('POS');
+_path = createDirectory('POS/uploads');
+const path = require("path");
 
 const storage = multer.diskStorage({
-    destination: process.env.APPDATA+'/POS/uploads',
+    destination: path.join(os.homedir(),'.storepos/POS/uploads'),
     filename: function(req, file, callback){
         callback(null, Date.now() + '.jpg'); // 
     }
@@ -23,9 +28,11 @@ app.use(bodyParser.json());
 
 module.exports = app;
 
+_path = createDirectory('POS/server');
+_path = createDirectory('POS/server/databases');
  
 let inventoryDB = new Datastore( {
-    filename: process.env.APPDATA+"/POS/server/databases/inventory.db",
+    filename: path.join(os.homedir(),".storepos/POS/server/databases/inventory.db"),
     autoload: true
 } );
 
@@ -75,9 +82,10 @@ app.post( "/product", upload.single('imagename'), function ( req, res ) {
  
 
     if(req.body.remove == 1) {
-        const path = './resources/app/public/uploads/product_image/'+ req.body.img;
+        const os = require("os");
+        const _path = path.join(os.homedir(),'.storepos/POS/uploads',req.body.img);
         try {
-          fs.unlinkSync(path)
+            if (fs.existsSync(_path)) fs.unlinkSync(_path)
         } catch(err) {
           console.error(err)
         }
@@ -93,7 +101,9 @@ app.post( "/product", upload.single('imagename'), function ( req, res ) {
         category: req.body.category,
         quantity: req.body.quantity == "" ? 0 : req.body.quantity,
         name: req.body.name,
-        stock: req.body.stock == "on" ? 0 : 1,    
+        stock: req.body.stock == "on" ? 0 : 1,  
+        unit: req.body.unit,  
+        lotnumber: req.body.lotnumber,
         img: image        
     }
 

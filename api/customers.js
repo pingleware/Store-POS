@@ -8,9 +8,15 @@ app.use( bodyParser.json() );
 
 module.exports = app;
 
+const createDirectory = require("./functions");
+var _path = createDirectory('POS');
+_path = createDirectory('POS/server');
+_path = createDirectory('POS/server/databases');
+const path = require("path");
+const os = require("os");
  
 let customerDB = new Datastore( {
-    filename: process.env.APPDATA+"/POS/server/databases/customers.db",
+    filename: path.join(os.homedir(),".storepos/POS/server/databases/customers.db"),
     autoload: true
 } );
 
@@ -47,7 +53,7 @@ app.post( "/customer", function ( req, res ) {
     var newCustomer = req.body;
     customerDB.insert( newCustomer, function ( err, customer ) {
         if ( err ) res.status( 500 ).send( err );
-        else res.sendStatus( 200 );
+        else res.status( 200 ).json(customer);
     } );
 } );
 

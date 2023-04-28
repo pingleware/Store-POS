@@ -4,14 +4,19 @@ const bodyParser = require( "body-parser" );
 const Datastore = require( "nedb" );
 const async = require( "async" );
 
-
 app.use( bodyParser.json() );
 
 module.exports = app;
 
- 
+const createDirectory = require("./functions");
+var _path = createDirectory('POS');
+_path = createDirectory('POS/server');
+_path = createDirectory('POS/server/databases');
+const path = require("path");
+const os = require("os");
+
 let categoryDB = new Datastore( {
-    filename: process.env.APPDATA+"/POS/server/databases/categories.db",
+    filename: path.join(os.homedir(),".storepos/POS/server/databases/categories.db"),
     autoload: true
 } );
 

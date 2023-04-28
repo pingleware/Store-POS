@@ -8,8 +8,15 @@ app.use(bodyParser.json());
 
 module.exports = app;
  
+const createDirectory = require("./functions");
+var _path = createDirectory('POS');
+_path = createDirectory('POS/server');
+_path = createDirectory('POS/server/databases');
+const path = require("path");
+const os = require("os");
+
 let transactionsDB = new Datastore({
-  filename: process.env.APPDATA+"/POS/server/databases/transactions.db",
+  filename: path.join(os.homedir(),".storepos/POS/server/databases/transactions.db"),
   autoload: true
 });
 
@@ -102,7 +109,7 @@ app.post("/new", function(req, res) {
   transactionsDB.insert(newTransaction, function(err, transaction) {    
     if (err) res.status(500).send(err);
     else {
-     res.sendStatus(200);
+     res.status(200).json(transaction);
 
      if(newTransaction.paid >= newTransaction.total){
         Inventory.decrementInventory(newTransaction.items);
