@@ -1254,6 +1254,9 @@ if (auth == undefined) {
             $('#product_id').val(allProducts[index]._id);
             $('#img').val(allProducts[index].img);
 
+            $('#productUnit').val(allProducts[index].unit);
+            $('#lotNumber').val(allProducts[index].lotnumber);
+
             if (allProducts[index].img != "") {
 
                 $('#imagename').hide();
