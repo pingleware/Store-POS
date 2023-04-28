@@ -1851,6 +1851,7 @@ if (auth == undefined) {
                 $("#contact").val(settings.contact);
                 $("#tax").val(settings.tax);
                 $("#symbol").val(settings.symbol);
+                $("#currency").val(settings.currency);
                 $("#percentage").val(settings.percentage);
                 $("#footer").val(settings.footer);
                 $("#logo_img").val(settings.img);
