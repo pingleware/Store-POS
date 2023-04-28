@@ -32,13 +32,6 @@ app.post("/webhook",express.raw({type: 'application/json'}), (req, res) => {
      * =========
      * TODO: verify signatures manually, see https://stripe.com/docs/webhooks/signatures#verify-manually
      */
-    //try {
-    //    //var webhookSecret = "whsec_c9ae00a87f8677b3fc25827361c96a252ed4197f19e6519fb3321a1f747d2983";
-    //    event = stripe.webhooks.constructEvent(req.body,sig,webhook_secret);
-    //} catch(error) {
-    //    return res.status(400).send(`Webhook Error: ${error.message}`);
-    //}
-
     if (event.type === 'payment_intent.created') {
         const paymentIntent = event.data.object;
 
@@ -47,8 +40,9 @@ app.post("/webhook",express.raw({type: 'application/json'}), (req, res) => {
     } else if (event.type === 'charge.succeeded') {
         const paymentIntent = event.data.object;
         console.log(`${event.id} PaymentIntent (${paymentIntent.payment_intent}:${paymentIntent.status}) Receipt URL (${paymentIntent.receipt_url})`)
-        var sql = `UPDATE orders SET receipt_url='${paymentIntent.receipt_url}' WHERE paymentintent_id='${paymentIntent.payment_intent}'`;
-        console.log(sql);
+        /**
+         * Should invoke  $(this).submitDueOrder(paymentIntent); change argument from status to payment intent
+         */
         res.status(200).json({received: true});
 
         //db.all(sql,[],function(err,rows){
@@ -66,13 +60,13 @@ app.post("/webhook",express.raw({type: 'application/json'}), (req, res) => {
              * When the sale is complete, the unearned revenue (Liability) amount is transfer to the revenue account (Asset).
              */
         //    const { unearnedRevenue } = require('@pingleware/bestbooks-helpers');
-        //    var description = `MYKRONEECAFE.KITCHEN Sale for Order #${paymentIntent.metadata.ordernum}`;
+        //    var description = `${settings.setor} Sale for Order #${paymentIntent.metadata.ordernum}`;
         //    unearnedRevenue(paymentIntent.created,description,Number(paymentIntent.amount / 100));
         //    var message = `delivery on ${paymentIntent.metadata.deliverydate} at ${paymentIntent.metadata.deliverytime}`;
         //    if (paymentIntent.metadata.deliverytime == "USPS") {
         //        message = `shipping on ${paymentIntent.metadata.deliverydate}`;
         //    }
-        //    desktop_notification('New Order for MYKRONEECAFE.KITCHEN',`Order #${paymentIntent.metadata.ordernum} for ${message}`);
+        //    desktop_notification('New Order for ${settings.setor}',`Order #${paymentIntent.metadata.ordernum} for ${message}`);
         //    res.status(200).json({received: true});
         //})
     } else if (event.type === 'payment_intent.succeeded') {
@@ -81,74 +75,6 @@ app.post("/webhook",express.raw({type: 'application/json'}), (req, res) => {
         var sql = `UPDATE orders SET paid='yes' WHERE paymentintent_id='${paymentIntent.id}';INSERT INTO status (ordernum,txdate,status) VALUES ('${paymentIntent.metadata.ordernum}',DATETIME('now','localtime'),'order paid successfully');`;
         console.log(sql);
         res.status(200).json({received: true});
-        /*
-        db.all(sql,[],function(err,rows){
-            var http = require('follow-redirects').http;
-            var fs = require('fs');
-            
-            var options = {
-                'method': 'POST',
-                'hostname': 'localhost',
-                'port': 8001,
-                'path': '/api/new',
-                'headers': {
-                'Content-Type': 'application/json'
-                },
-                'maxRedirects': 20
-            };
-            
-            var request = http.request(options, function (response) {
-                var chunks = [];
-            
-                response.on("data", function (chunk) {
-                chunks.push(chunk);
-                });
-            
-                response.on("end", function (chunk) {
-                var body = Buffer.concat(chunks);
-                console.log(body.toString());
-                res.status(200).json({received: true});
-                });
-            
-                response.on("error", function (error) {
-                console.error(error);
-                });
-            });
-            
-            var postData = JSON.stringify({
-                "order": `${paymentIntent.metadata.ordernum}`,
-                "ref_number": "",
-                "discount": "",
-                "customer": 1682639106,
-                "status": 1,
-                "subtotal": "10.00",
-                "tax": 0,
-                "order_type": 1,
-                "items": [
-                {
-                    "id": 1682480035,
-                    "product_name": "Banana Bread Loaf",
-                    "price": "10.00",
-                    "quantity": 2
-                }
-                ],
-                "date": `${new Date(paymentIntent.created).toISOString()}`,
-                "payment_type": `${paymentIntent.payment_method_types[0]}`,
-                "payment_info": `${paymentIntent.latest_charge}`,
-                "total": `${Number(paymentIntent.amount)/100}`,
-                "paid": `${Number(paymentIntent.amount)/100}`,
-                "change": "0.00",
-                "id": `${paymentIntent.id}`,
-                "till": 1,
-                "user": "Administrator",
-                "user_id": 1
-            });
-            
-            request.write(postData);
-            
-            request.end();                    
-        })
-        */
     } else {
         res.status(200).json({received: true});
     }

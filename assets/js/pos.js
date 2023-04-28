@@ -596,7 +596,9 @@ if (auth == undefined) {
 
         }
 
-
+        /**
+         * TODO: replace the paymentInfo on the paymentModel dialog with stripe card info, and create a payment intents object
+         */
         $("#payButton").on('click', function () {
             if (cart.length != 0) {
                 $("#paymentModel").modal('toggle');
@@ -1099,6 +1101,9 @@ if (auth == undefined) {
         });
 
 
+        /**
+         * TODO: will invoke stripe.confirmCardPayment()
+         */
         $("#confirmPayment").on('click', function () {
             if ($('#payment').val() == "") {
                 Swal.fire(
