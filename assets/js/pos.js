@@ -37,7 +37,7 @@ const app = remote.app;
 let img_path = os.homedir() + '/.storepos/POS/uploads/';
 let api = 'http://' + host + ':' + port + '/api/';
 let btoa = require('btoa');
-let jsPDF = require('jspdf');
+let {jsPDF} = require('jspdf');
 let html2canvas = require('html2canvas');
 let JsBarcode = require('jsbarcode');
 let macaddress = require('macaddress');
@@ -1905,12 +1905,22 @@ if (auth == undefined) {
 
         $('#productList').DataTable().destroy();
 
-        const filename = 'productList.pdf';
+        const filename = path.join(os.homedir(),'.storepos/productList.pdf');
 
         html2canvas($('#all_products').get(0)).then(canvas => {
             let height = canvas.height * (25.4 / 96);
             let width = canvas.width * (25.4 / 96);
-            let pdf = new jsPDF('p', 'mm', 'a4');
+            let pdf = new jsPDF();
+            //let pdf = new jsPDF({
+            //    orientation: 'p',
+            //    unit: 'mm',
+            //    format: 'a4'
+            //});
+            pdf.setProperties({
+                orientation: 'p',
+                unit: 'mm',
+                format: 'a4'
+            })
             pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, width, height);
 
             $("#loading").hide();

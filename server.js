@@ -10,8 +10,8 @@ const PORT = process.env.PORT || 8001;
 const HOST = process.env.HOST || "localhost";
 
 console.log("Server started");
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.all("/*", function(req, res, next) {
  

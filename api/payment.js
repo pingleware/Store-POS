@@ -36,6 +36,7 @@ if (platform.stripestatus && platform.stripestatus == "live") {
 
 app.post("/paymentintent", async (req, res) => {
     try {
+        console.log(req.body);
         const paymentIntent = await stripe.paymentIntents.create({
             amount: Number(req.body.amount) * 100,
             currency: req.body.currency,
