@@ -4,7 +4,10 @@ let express = require("express"),
   server = http.createServer(app),
   bodyParser = require("body-parser");
 
+const childProcess = require('child_process');
+
 const PORT = process.env.PORT || 8001;
+const HOST = process.env.HOST || "localhost";
 
 console.log("Server started");
 app.use(bodyParser.json());
@@ -29,6 +32,7 @@ app.get("/", function(req, res) {
   res.send("POS Server Online.");
 });
 
+app.use("/api/payment", require("./api/payment"));
 app.use("/api/inventory", require("./api/inventory"));
 app.use("/api/customers", require("./api/customers"));
 app.use("/api/categories", require("./api/categories"));
@@ -36,4 +40,9 @@ app.use("/api/settings", require("./api/settings"));
 app.use("/api/users", require("./api/users"));
 app.use("/api", require("./api/transactions"));
 
-server.listen(PORT, () => console.log(`Listening on PORT ${PORT}`));
+server.listen(PORT, HOST, () => {
+  console.log(`Listening on PORT ${PORT}`)
+  var command = `stripe listen --forward-to http://${HOST}:${PORT}/api/payment/webhook --skip-verify`;
+  console.log(command);
+  childProcess.exec(command)  
+});
