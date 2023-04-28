@@ -227,8 +227,9 @@ if (auth == undefined) {
                                         <div class="text-muted m-t-5 text-center">
                                         <div class="name" id="product_name">${item.name}</div> 
                                         <span class="sku">${item.sku}</span>
-                                        <span class="sku" id="lot_number">${item.lotnumber}</span>
+                                        <div class="name" id="lot_number"><span class="stock">LOT # </span>${item.lotnumber}</div>
                                         <span class="stock">STOCK </span><span class="count">${item.stock == 1 ? item.quantity : 'N/A'}</span></div>
+                                        <div class="name" id="product_unit">${item.unit}</div>
                                         <sp class="text-success text-center"><b data-plugin="counterup">${settings.symbol + item.price}</b> </sp>
                             </div>
                         </div>`;
@@ -1853,6 +1854,11 @@ if (auth == undefined) {
                 $("#percentage").val(settings.percentage);
                 $("#footer").val(settings.footer);
                 $("#logo_img").val(settings.img);
+                $("#stripestatus").prop("checked", settings.stripe.live);
+                $("#stripeLivePublishable").val(settings.stripe.publishable.live);
+                $("#stripeLiveSecret").val(settings.stripe.secret.live);
+                $("#stripeTestPublishable").val(settings.stripe.publishable.test);
+                $("#stripeTestSecret").val(settings.stripe.secret.test);
                 if (settings.charge_tax == 'on') {
                     $('#charge_tax').prop("checked", true);
                 }

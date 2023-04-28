@@ -5,6 +5,8 @@ const bodyParser = require( "body-parser" );
 const Datastore = require( "nedb" );
 const async = require( "async" );
 
+require('dotenv').config()
+
 app.use( bodyParser.json() );
 
 module.exports = app;
@@ -19,6 +21,31 @@ const path = require("path");
 //    filename: path.join(_path,"settings.db"),
 //    autoload: true
 //} );
+let Store = require('electron-store');
+let storage = new Store();
+let platform = storage.get('settings');
+
+var stripe = null;
+
+if (platform.stripestatus && platform.stripestatus == "live") {
+    stripe = require('stripe')(platform.stripelivesecret);
+} else {
+    stripe = require('stripe')(platform.stripetestsecret);
+}
+
+
+app.post("/paymentintent", async (req, res) => {
+    try {
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: Number(req.body.amount) * 100,
+            currency: req.body.currency,
+            payment_method_types: [req.body.type]
+        });
+        res.status(200).json({status: 'success', id: paymentIntent.id,clientSecret: paymentIntent.client_secret});       
+    } catch(e) {
+        res.status(400).json({status: 'error', message: e.message});
+    }
+})
 
 /**
  * See https://www.youtube.com/watch?v=WG4ehXSEpz4 for creating a payment intent

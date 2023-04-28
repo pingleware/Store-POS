@@ -75,8 +75,7 @@ app.post( "/post", upload.single('imagename'), function ( req, res ) {
             image = '';
         }
     } 
-    
-  
+          
     let Settings = {  
         _id: 1,
         settings: {
@@ -90,7 +89,18 @@ app.post( "/post", upload.single('imagename'), function ( req, res ) {
             "percentage": req.body.percentage,
             "charge_tax": req.body.charge_tax,
             "footer": req.body.footer,
-            "img": image
+            "img": image,
+            "stripe": {
+                "live": (req.body.stripestatus ? true : false),
+                "publishable": {
+                    "live": req.body.stripelivepublishable,
+                    "test": req.body.stripetestpublishable
+                },
+                "secret": {
+                    "live": req.body.stripelivesecret,
+                    "test": req.body.stripetestsecret
+                }
+            }
         }       
     }
 
