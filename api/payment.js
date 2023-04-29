@@ -33,16 +33,53 @@ if (platform.stripestatus && platform.stripestatus == "live") {
     stripe = require('stripe')(platform.stripetestsecret);
 }
 
+app.post("/readers/process-payment", async (req, res) => {
+    try {
+        const { amount, currency, readerId } = req.body;
+        const paymentIntent = await stripe.paymentIntents.create({
+            currency: currency.toLowerCase(),
+            amount,
+            payment_method_types: ["card_present"],
+            capture_method: "manual"
+        });
+        const reader = await stripe.terminal.readers.processPaymentIntent(readerId, {
+            payment_intent: paymentIntent.id
+        })
+        res.send({status: "success", reader: reader, paymentIntent: paymentIntent});
+    } catch(e) {
+        res.send({status: "error", message: e.message});
+    }
+})
+
+app.post("/readers/simulate-payment", async (req,res) =>{
+    try {
+        const { readerId } =req.body;
+        const reader = await stripe.testHelpers.terminal.readers.presentPaymentMethod(readerId);
+        res.send({status: 'success', reader: reader});
+    } catch(e) {
+        res.send({status: 'error', message: e.message});
+    }
+})
+
+app.post("/capture", async (req,res) => {
+    try {
+        const { paymentIntentId } = req.body;
+        const paymentIntent = await stripe.paymentIntents.capture(paymentIntentId);
+        res.send({status: "success", paymentIntent: paymentIntent});
+    } catch(e) {
+        res.send({status: 'error', message: e.message});
+    }
+})
 
 app.post("/paymentintent", async (req, res) => {
     try {
         console.log(req.body);
         const paymentIntent = await stripe.paymentIntents.create({
             amount: Number(req.body.amount) * 100,
-            currency: req.body.currency,
+            currency: req.body.currency.toLowerCase(),
             payment_method_types: [req.body.type]
         });
-        res.status(200).json({status: 'success', id: paymentIntent.id,clientSecret: paymentIntent.client_secret});       
+        res.status(200).json({status: 'success', paymentIntent: paymentIntent});       
     } catch(e) {
         res.status(400).json({status: 'error', message: e.message});
     }
@@ -99,9 +136,7 @@ app.post("/webhook",express.raw({type: 'application/json'}), (req, res) => {
         //})
     } else if (event.type === 'payment_intent.succeeded') {
         const paymentIntent = event.data.object;
-        // TODO: update paid status to yes
-        var sql = `UPDATE orders SET paid='yes' WHERE paymentintent_id='${paymentIntent.id}';INSERT INTO status (ordernum,txdate,status) VALUES ('${paymentIntent.metadata.ordernum}',DATETIME('now','localtime'),'order paid successfully');`;
-        console.log(sql);
+        // TODO: invoke pos.js:$.fn.submitDueOrder from this stripe callback
         res.status(200).json({received: true});
     } else {
         res.status(200).json({received: true});

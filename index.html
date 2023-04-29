@@ -396,10 +396,11 @@
                   <div class="row">
                       <div class="col-md-4">
                           <div class="list-group">
-                              <a href="javascript:void(0)" id="cash" onclick="paymentType = 1" class="list-group-item active">
+                              <input type="hidden" id="paymentType" value="1" />
+                              <a href="javascript:void(0)" id="cash" onclick="document.getElementById('paymentType').value=1;" class="list-group-item active">
                                   Cash
                               </a>
-                            <a href="javascript:void(0)" id="card" onclick="paymentType = 3" class="list-group-item">Card</a>
+                            <a href="javascript:void(0)" id="card" onclick="document.getElementById('paymentType').value=3;" class="list-group-item">Card</a>
                           </div>
                       </div>
                       <div class="col-md-8">
@@ -474,7 +475,7 @@
                           <br>
                           <div class="input-group" id="cardInfo">
                               <span class="input-group-addon" id="basic-addon3">Card Info </span>
-                              <input type="text" class="form-control" id="paymentInfo" aria-describedby="basic-addon3">
+                              <div class="form-control" id="paymentInfo" aria-describedby="basic-addon3"></div>
                           </div>
                       </div>
                   </div>
@@ -1173,7 +1174,9 @@ require('./renderer.js');
 
     
     <script>
-
+        var stripe;
+        var publishableKey;
+        var cardElement;
     // $(function () {
     //  "use strict";
     //     jqKeyboard.init({

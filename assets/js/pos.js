@@ -63,6 +63,8 @@ let by_till = 0;
 let by_user = 0;
 let by_status = 1;
 
+window.POS = {};
+
 $(function () {
 
     function cb(start, end) {
@@ -597,12 +599,53 @@ if (auth == undefined) {
 
         }
 
+
         /**
          * TODO: replace the paymentInfo on the paymentModel dialog with stripe card info, and create a payment intents object
          */
         $("#payButton").on('click', function () {
             if (cart.length != 0) {
-                $("#paymentModel").modal('toggle');
+
+                var settings = {
+                    "url": api + "settings/get",
+                    "method": "GET",
+                    "timeout": 0,
+                };
+                  
+                $.ajax(settings).done(function (response) {
+                    console.log(response);
+                    window.currency = response.settings.currency;
+                    if (response.settings.stripe.live) {
+                        localStorage.setItem("publishableKey",response.settings.stripe.publishable.live);
+                    } else {
+                        localStorage.setItem("publishableKey",response.settings.stripe.publishable.test);
+                    }
+
+                    var settings = {
+                        "url": api + "payment/paymentintent",
+                        "method": "POST",
+                        "timeout": 0,
+                        "headers": {
+                          "Content-Type": "application/json"
+                        },
+                        "data": JSON.stringify({
+                          "amount": $("#payablePrice").val(),
+                          "currency": window.currency,
+                          "type": "card"
+                        }),
+                      };
+                      
+                      $.ajax(settings).done(function (response) {
+                        console.log(response);
+                        localStorage.setItem("client_secret",response.paymentIntent.client_secret);
+                        globalThis.stripe = Stripe(localStorage.getItem("publishableKey"));
+                        var elements = globalThis.stripe.elements();
+                        globalThis.cardElement = elements.create('card');
+                        globalThis.cardElement.mount('#paymentInfo');
+            
+                        $("#paymentModel").modal('toggle');        
+                      });                    
+                });
             } else {
                 Swal.fire(
                     'Oops!',
@@ -657,8 +700,12 @@ if (auth == undefined) {
             let type = "";
             let tax_row = "";
 
+            paymentType = document.getElementById('paymentType').value;
+
 
             switch (paymentType) {
+                case 0: type = "Cash";
+                    break;
 
                 case 1: type = "Cheque";
                     break;
@@ -666,8 +713,7 @@ if (auth == undefined) {
                 case 2: type = "Card";
                     break;
 
-                default: type = "Cash";
-
+                default: type = "Card";
             }
 
 
@@ -1105,7 +1151,7 @@ if (auth == undefined) {
         /**
          * TODO: will invoke stripe.confirmCardPayment()
          */
-        $("#confirmPayment").on('click', function () {
+        $("#confirmPayment").on('click',async function () {
             if ($('#payment').val() == "") {
                 Swal.fire(
                     'Nope!',
@@ -1114,7 +1160,20 @@ if (auth == undefined) {
                 );
             }
             else {
-                $(this).submitDueOrder(1);
+                var client_secret = localStorage.getItem("client_secret");
+                const {paymentIntent} = await globalThis.stripe.confirmCardPayment(
+                    client_secret, {
+                        payment_method: {
+                            card: globalThis.cardElement
+                        }
+                    }
+                )
+                console.log(paymentIntent);
+                if (paymentIntent.error) {
+                    alert(paymentIntent.error.message);
+                } else {
+                    $(this).submitDueOrder(1);
+                }
             }
         });
 

@@ -64,7 +64,6 @@ ipcMain.on('app-reload', (event, arg) => {
 });
 
 
-
 contextMenu({
   prepend: (params, browserWindow) => [
      
