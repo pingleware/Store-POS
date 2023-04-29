@@ -27,10 +27,12 @@ let platform = storage.get('settings');
 
 var stripe = null;
 
-if (platform.stripestatus && platform.stripestatus == "live") {
-    stripe = require('stripe')(platform.stripelivesecret);
-} else {
-    stripe = require('stripe')(platform.stripetestsecret);
+if (platform) {
+    if (platform.stripestatus && platform.stripestatus == "live") {
+        stripe = require('stripe')(platform.stripelivesecret);
+    } else {
+        stripe = require('stripe')(platform.stripetestsecret);
+    }    
 }
 
 app.post("/readers/process-payment", async (req, res) => {

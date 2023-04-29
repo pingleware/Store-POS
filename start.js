@@ -77,11 +77,13 @@ contextMenu({
         click() {
           mainWindow.reload();
       } 
-    // },
-    // {  label: 'Quit',  click:  function(){
-    //    mainWindow.destroy();
-    //     mainWindow.quit();
-    // } 
+     },
+     {  
+        label: "Quit",  
+        click:  function(){
+          mainWindow.destroy();
+          //mainWindow.quit();
+        } 
   }  
   ],
 
