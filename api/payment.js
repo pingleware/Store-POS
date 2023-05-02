@@ -5,8 +5,6 @@ const bodyParser = require( "body-parser" );
 const Datastore = require( "nedb" );
 const async = require( "async" );
 
-require('dotenv').config()
-
 app.use( bodyParser.json() );
 
 module.exports = app;
@@ -15,18 +13,25 @@ const createDirectory = require("./functions");
 var _path = createDirectory('POS');
 _path = createDirectory('POS/server');
 _path = createDirectory('POS/server/databases');
-const path = require("path");
 
-//let settingsDB = new Datastore( {
-//    filename: path.join(_path,"settings.db"),
-//    autoload: true
-//} );
-let Store = require('electron-store');
-let storage = new Store();
-let platform = storage.get('settings');
+const fs = require("fs");
+const os = require("os");
+const path = require("path");
 
 var stripe = null;
 
+if (fs.existsSync(path.join(os.homedir(),'.storepos/stripe.json'))) {
+    const stripe_settings = require(path.join(os.homedir(),'.storepos/stripe.json'));
+    console.log(stripe_settings)
+    if (stripe_settings.live) {
+        stripe = require('stripe')(stripe_settings.secret.live);
+    } else {
+        stripe = require('stripe')(stripe_settings.secret.test);
+    }
+}
+
+
+/*
 if (platform) {
     if (platform.stripestatus && platform.stripestatus == "live") {
         stripe = require('stripe')(platform.stripelivesecret);
@@ -34,6 +39,9 @@ if (platform) {
         stripe = require('stripe')(platform.stripetestsecret);
     }    
 }
+*/
+
+
 
 app.post("/readers/process-payment", async (req, res) => {
     try {
@@ -75,7 +83,6 @@ app.post("/capture", async (req,res) => {
 
 app.post("/paymentintent", async (req, res) => {
     try {
-        console.log(req.body);
         const paymentIntent = await stripe.paymentIntents.create({
             amount: Number(req.body.amount) * 100,
             currency: req.body.currency.toLowerCase(),
@@ -102,11 +109,11 @@ app.post("/webhook",express.raw({type: 'application/json'}), (req, res) => {
     if (event.type === 'payment_intent.created') {
         const paymentIntent = event.data.object;
 
-        console.log(`${event.id} PaymentIntent (${paymentIntent.id}:${paymentIntent.status})`);
+        //console.log(`${event.id} PaymentIntent (${paymentIntent.id}:${paymentIntent.status})`);
         res.status(200).json({received: true});
     } else if (event.type === 'charge.succeeded') {
         const paymentIntent = event.data.object;
-        console.log(`${event.id} PaymentIntent (${paymentIntent.payment_intent}:${paymentIntent.status}) Receipt URL (${paymentIntent.receipt_url})`)
+        //console.log(`${event.id} PaymentIntent (${paymentIntent.payment_intent}:${paymentIntent.status}) Receipt URL (${paymentIntent.receipt_url})`)
         /**
          * Should invoke  $(this).submitDueOrder(paymentIntent); change argument from status to payment intent
          */
@@ -144,3 +151,4 @@ app.post("/webhook",express.raw({type: 'application/json'}), (req, res) => {
         res.status(200).json({received: true});
     }
 });
+

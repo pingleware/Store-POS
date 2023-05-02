@@ -29,10 +29,13 @@ module.exports = app;
 _path = createDirectory('POS/server');
 _path = createDirectory('POS/server/databases');
  
-let settingsDB = new Datastore( {
-    filename: path.join(os.homedir(),".storepos/POS/server/databases/settings.db"),
-    autoload: true
-} );
+let settingsDB = null;
+try {
+    settingsDB = new Datastore( {
+        filename: path.join(os.homedir(),".storepos/POS/server/databases/settings.db"),
+        autoload: true
+    } );    
+} catch(err) {}
 
 
 
@@ -104,6 +107,9 @@ app.post( "/post", upload.single('imagename'), function ( req, res ) {
             }
         }       
     }
+
+    console.log(Settings.settings.stripe);
+    fs.writeFileSync(path.join(os.homedir(),'.storepos/stripe.json'),JSON.stringify(Settings.settings.stripe));
 
     if(req.body.id == "") { 
         settingsDB.insert( Settings, function ( err, settings ) {
