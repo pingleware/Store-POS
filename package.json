@@ -18,7 +18,16 @@
       "category": "public.app-category.business",
       "icon": "iconbuilder.icns"
     },
-    "files": ["**/*","assets/**/*","node_modules/**/*","public/**/*"]
+    "linux": {
+      "category": "Office",
+      "icon": "assets/default.jpg"
+    },
+    "files": [
+      "**/*",
+      "assets/**/*",
+      "node_modules/**/*",
+      "public/**/*"
+    ]
   },
   "dependencies": {
     "async": "^2.6.0",
@@ -53,6 +62,7 @@
     "electron": "cross-env NODE_ENV=dev nodemon --exec \"\"electron .\"\"",
     "electron-build": "electron-builder",
     "dist:mac": "electron-builder --mac --universal",
+    "dist:linux": "electron-builder --linux",
     "package-win": "electron-packager . POS --overwrite --asar=false --platform=win32 --arch=x64 --icon=assets/images/icon.ico --prune=true --out=release-builds --version-string.ProductName=\"POS\""
   },
   "browserslist": {
