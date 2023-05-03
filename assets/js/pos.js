@@ -1919,6 +1919,7 @@ if (auth == undefined) {
                 $("#stripeLiveSecret").val(settings.stripe.secret.live);
                 $("#stripeTestPublishable").val(settings.stripe.publishable.test);
                 $("#stripeTestSecret").val(settings.stripe.secret.test);
+                $('#stripeTerminalLocationID').val(settings.stripe.terminal.locationid)
                 if (settings.charge_tax == 'on') {
                     $('#charge_tax').prop("checked", true);
                 }
