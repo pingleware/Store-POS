@@ -103,6 +103,9 @@ app.post( "/post", upload.single('imagename'), function ( req, res ) {
                 "secret": {
                     "live": req.body.stripelivesecret,
                     "test": req.body.stripetestsecret
+                },
+                "terminal": {
+                    "locationid": req.body.stripeterminallocationid
                 }
             }
         }       
