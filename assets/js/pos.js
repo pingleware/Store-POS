@@ -642,6 +642,22 @@ if (auth == undefined) {
                         var elements = globalThis.stripe.elements();
                         globalThis.cardElement = elements.create('card');
                         globalThis.cardElement.mount('#paymentInfo');
+                        document.getElementById("paymentMethod").innerHTML = `<option value="manual" selected>Manual Entry</option>`;
+                        fetch(api + "payment/readers")
+                        .then(response => response.json())
+                        .then(function(result){
+                            if (result.status == "success") {
+                                var readers = result.readersList;
+                                readers.forEach(function(reader){
+                                    console.log(reader);
+                                    var base64 = btoa(JSON.stringify(reader));
+                                    var disabled = reader.status == "online" ? "" : "disabled";
+                                    var title = reader.status;
+                                    document.getElementById("paymentMethod").innerHTML += `<option value="${reader.id}" ${disabled} title="${title}" data-reader="${base64}">${reader.label}</option>`;
+                                })    
+                            }
+                        })
+                        .catch(error => console.log('error', error))
             
                         $("#paymentModel").modal('toggle');        
                       });                    
@@ -1142,6 +1158,7 @@ if (auth == undefined) {
         $("#confirmPayment").hide();
 
         $("#cardInfo").hide();
+        $("#cardPaymentMethod").hide();
 
         $("#payment").on('input', function () {
             $(this).calculateChange();
@@ -1643,6 +1660,29 @@ if (auth == undefined) {
             }
         }
 
+        var terminal = StripeTerminal.create({
+        onFetchConnectionToken: fetchConnectionToken,
+        onUnexpectedReaderDisconnect: unexpectedDisconnect,
+        });
+
+        function unexpectedDisconnect() {
+        // In this function, your app should notify the user that the reader disconnected.
+        // You can also include a way to attempt to reconnect to a reader.
+        console.log("Disconnected from reader")
+        }
+
+        function fetchConnectionToken() {
+        // Do not cache or hardcode the ConnectionToken. The SDK manages the ConnectionToken's lifecycle.
+        api = 'http://' + host + ':' + port + '/api/';
+        return fetch(api + 'payment/connection_token', { method: "POST" })
+            .then(function(response) {
+            return response.json();
+            })
+            .then(function(data) {
+            return data.secret;
+            });
+        }
+
 
         $.fn.serializeObject = function () {
             var o = {};
@@ -1881,7 +1921,6 @@ if (auth == undefined) {
         });
 
 
-
         $('#settings').click(function () {
 
             if (platform.app == 'Network Point of Sale Terminal') {
@@ -1914,12 +1953,14 @@ if (auth == undefined) {
                 $("#percentage").val(settings.percentage);
                 $("#footer").val(settings.footer);
                 $("#logo_img").val(settings.img);
+                $("#stripeMerchantCategory").val(settings.stripe.category);
                 $("#stripestatus").prop("checked", settings.stripe.live);
                 $("#stripeLivePublishable").val(settings.stripe.publishable.live);
                 $("#stripeLiveSecret").val(settings.stripe.secret.live);
                 $("#stripeTestPublishable").val(settings.stripe.publishable.test);
                 $("#stripeTestSecret").val(settings.stripe.secret.test);
-                $('#stripeTerminalLocationID').val(settings.stripe.terminal.locationid)
+                $('#stripeTerminalLiveLocationID').val(settings.stripe.terminal.locationid.live);
+                $('#stripeTerminalTestLocationID').val(settings.stripe.terminal.locationid.test);
                 if (settings.charge_tax == 'on') {
                     $('#charge_tax').prop("checked", true);
                 }
@@ -1933,10 +1974,6 @@ if (auth == undefined) {
                     return $(this).text() == settings.app;
                 }).prop("selected", true);
             }
-
-
-
-
         });
 
 

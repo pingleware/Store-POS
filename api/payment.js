@@ -18,7 +18,8 @@ const fs = require("fs");
 const os = require("os");
 const path = require("path");
 
-var stripe = null;
+let stripe = null;
+let locationID = null;
 
 if (fs.existsSync(path.join(os.homedir(),'.storepos/stripe.json'))) {
     const stripe_settings = require(path.join(os.homedir(),'.storepos/stripe.json'));
@@ -27,6 +28,15 @@ if (fs.existsSync(path.join(os.homedir(),'.storepos/stripe.json'))) {
         stripe = require('stripe')(stripe_settings.secret.live);
     } else {
         stripe = require('stripe')(stripe_settings.secret.test);
+    }
+    if (stripe_settings.terminal.locationid) {
+        locationID = stripe_settings.terminal.locationid;
+    }
+    async () => {
+        const configurations = await stripe.terminal.configurations.list({
+            is_account_default: true,
+          });
+        console.log(configurations)    
     }
 }
 
@@ -41,9 +51,29 @@ if (platform) {
 }
 */
 
+/**
+ * Routes for interacting with a terminal reader
+ */
+app.get("/readers", async (req,res) => {
+    try {
+        const { data: readers } = await stripe.terminal.readers.list();
+        console.log(readers)
+        res.json({status: "success", readersList: readers});
+      } catch(e) {
+        res.json({status: "error", message: e.message});
+      }    
+})
 
+app.get('/reader/locationid', async (req, res) => {
+    res.send(locationID);
+})
 
-app.post("/readers/process-payment", async (req, res) => {
+app.post('/reader/connection_token', async (req, res) => {
+    let connectionToken = await stripe.terminal.connectionTokens.create();
+    res.json({secret: connectionToken.secret});
+});
+
+app.post("/reader/process-payment", async (req, res) => {
     try {
         const { amount, currency, readerId } = req.body;
         const paymentIntent = await stripe.paymentIntents.create({
@@ -61,9 +91,9 @@ app.post("/readers/process-payment", async (req, res) => {
     }
 })
 
-app.post("/readers/simulate-payment", async (req,res) =>{
+app.post("/reader/simulate-payment", async (req,res) =>{
     try {
-        const { readerId } =req.body;
+        const { readerId } = req.body;
         const reader = await stripe.testHelpers.terminal.readers.presentPaymentMethod(readerId);
         res.send({status: 'success', reader: reader});
     } catch(e) {
@@ -71,7 +101,7 @@ app.post("/readers/simulate-payment", async (req,res) =>{
     }
 })
 
-app.post("/capture", async (req,res) => {
+app.post("/reader/capture", async (req,res) => {
     try {
         const { paymentIntentId } = req.body;
         const paymentIntent = await stripe.paymentIntents.capture(paymentIntentId);
@@ -80,6 +110,21 @@ app.post("/capture", async (req,res) => {
         res.send({status: 'error', message: e.message});
     }
 })
+
+app.post("/reader/cancel", async (req, res) => {
+    try {
+        const { readerId } = req.body;
+        const reader = await stripe.terminal.readers.cancelAction(readerId);
+        res.send({reader});     
+    } catch(e) {
+        res.status(400).json({status: 'error', message: e.message});
+    }
+})
+
+
+/**
+ * Routes for non-reader interaction
+ */
 
 app.post("/paymentintent", async (req, res) => {
     try {
@@ -93,6 +138,7 @@ app.post("/paymentintent", async (req, res) => {
         res.status(400).json({status: 'error', message: e.message});
     }
 })
+
 
 /**
  * See https://www.youtube.com/watch?v=WG4ehXSEpz4 for creating a payment intent

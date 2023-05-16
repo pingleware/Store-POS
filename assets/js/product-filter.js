@@ -79,16 +79,30 @@ $(document).ready(function(){
        $list.removeClass('active');
        $(this).addClass('active');
        if(this.id == 'check'){
+            $("#payment").removeAttr("max");
+            $("#cardPaymentMethod").show();
             $("#cardInfo").show();
             $("#cardInfo .input-group-addon").text("Check Info");
        }else if(this.id == 'card'){
-           $("#cardInfo").show();
-           $("#cardInfo .input-group-addon").text("Card Info");
+            $("#payment").attr("max",$("#payablePrice").val())
+            $("#cardInfo").show();
+            $("#cardPaymentMethod").show();
+            $("#cardInfo .input-group-addon").text("Card Info");
        }else if(this.id == 'cash'){
-           $("#cardInfo").hide();
+            $("#payment").removeAttr("max");
+            $("#cardInfo").hide();
+            $("#cardPaymentMethod").hide();
        }
     });
 
+    $("#paymentMethod").change(function(e){
+        console.log(this.value)
+        if (this.value == "manual") {
+            $("#cardInfo").show();
+        } else {
+            $("#cardInfo").hide();
+        }
+    })
 
     $.fn.go = function (value,isDueInput) {
         if(isDueInput){
@@ -106,17 +120,19 @@ $(document).ready(function(){
     }
 
     $.fn.calculateChange = function () {
+        var cashActive = $("#cash").hasClass("active");
         var change = $("#payablePrice").val() - $("#payment").val();
-        if(change <= 0){
+        if(change <= 0 && cashActive){
             $("#change").text(change.toFixed(2));
         }else{
+            change = 0;
             $("#change").text('0')
         }
         if(change <= 0){
             $("#confirmPayment").show();
         }else{
             $("#confirmPayment").hide();
-        }
+        }    
     }
 
 })

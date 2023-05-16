@@ -411,7 +411,7 @@
                           <br>
                           <div class="input-group">
                               <span class="input-group-addon" id="basic-addon3">Payment  <span id="payment_curr"></span> </span>
-                              <input type="text" placeholder="0.0" class="form-control" id="payment" aria-describedby="basic-addon3">
+                              <input type="number" placeholder="0.0" class="form-control" id="payment" aria-describedby="basic-addon3">
                           </div>
                           <hr>
                           <div class="row">
@@ -473,6 +473,12 @@
                               </div>
                           </div>
                           <br>
+                          <div class="input-group" id="cardPaymentMethod">
+                            <span class="input-group-addon" id="basic-addon3">Card Payment Type </span>
+                            <select class="form-control" id="paymentMethod" aria-describedby="basic-addon3">
+                                <option value="manual" selected>Manual Entry</option>
+                            </select>
+                          </div>
                           <div class="input-group" id="cardInfo">
                               <span class="input-group-addon" id="basic-addon3">Card Info </span>
                               <div class="form-control" id="paymentInfo" aria-describedby="basic-addon3"></div>
@@ -1129,8 +1135,312 @@
                                     <input type="text" name="stripetestsecret" class="form-control" id="stripeTestSecret" value="">
                                 </div>
                                 <div class="form-group">
-                                    <label for="userName">Stripe Terminal Location ID (<i>Visit <a href="https://dashboard.stripe.com/terminal/locations/" target="_blank">https://dashboard.stripe.com/terminal/locations/</a> to get the location id?</i>)</label>
-                                    <input type="text" name="stripeterminallocationid" class="form-control" id="stripeTerminalLocationID" value="">
+                                    <label for="userName">Stripe Terminal Live Location ID</label>
+                                    <input type="text" name="stripeterminallivelocationid" class="form-control" id="stripeTerminalLiveLocationID" value="">
+                                </div>
+                                <div class="form-group">
+                                    <label for="userName">Stripe Terminal Test Location ID</label>
+                                    <input type="text" name="stripeterminaltestlocationid" class="form-control" id="stripeTerminalTestLocationID" value="">
+                                </div>
+                                <div class="form-group">
+                                    <label for="userName">Merchant Category</label>
+                                    <select name="stripemcc" class="form-control" id="stripeMerchantCategory">
+                                        <option value="">Select</option>
+                                        <option value="7623" data-id="ac_refrigeration_repair">A/C, Refrigeration Repair</option>
+                                        <option value="8931" data-id="accounting_bookkeeping_services">Accounting/Bookkeeping Services</option>
+                                        <option value="7311" data-id="advertising_services">Advertising Services</option>
+                                        <option value="0763" data-id="agricultural_cooperative">Agricultural Cooperative</option> 
+                                        <option value="4511" data-id="airlines_air_carriers">Airlines, Air Carriers</option>
+                                        <option value="4582" data-id="airports_flying_fields">Airports, Flying Fields</option>
+                                        <option value="4119" data-id="ambulance_services">Ambulance Services</option>
+                                        <option value="7996" data-id="amusement_parks_carnivals">Amusement Parks/Carnivals</option>
+                                        <option value="5937" data-id="antique_reproductions">Antique Reproductions</option>
+                                        <option value="5932" data-id="antique_shops">Antique Shops</option>
+                                        <option value="7998" data-id="aquariums">Aquariums</option>
+                                        <option value="8911" data-id="architectural_surveying_services">Architectural/Surveying Services</option>
+                                        <option value="5971" data-id="art_dealers_and_galleries">Art Dealers and Galleries</option>
+                                        <option value="5970" data-id="artists_supply_and_craft_shops">Artists Supply and Craft Shops</option>
+                                        <option value="7531" data-id="auto_body_repair_shops">Auto Body Repair Shops</option>
+                                        <option value="7535" data-id="auto_paint_shops">Auto Paint Shops</option>
+                                        <option value="7538" data-id="auto_service_shops">Auto Service Shops</option>
+                                        <option value="5531" data-id="auto_and_home_supply_stores">Auto and Home Supply Stores</option>
+                                        <option value="6011" data-id="automated_cash_disburse">Automated Cash Disburse</option>
+                                        <option value="5542" data-id="automated_fuel_dispensers">Automated Fuel Dispensers</option>
+                                        <option value="8675" data-id="automobile_associations">Automobile Associations</option>
+                                        <option value="5533" data-id="automotive_parts_and_accessories_stores">Automotive Parts and Accessories Stores</option>
+                                        <option value="5532" data-id="automotive_tire_stores">Automotive Tire Stores</option>
+                                        <option value="9223" data-id="bail_and_bond_payments">Bail and Bond Payments (payment to the surety for the bond, not the actual bond paid to the government agency)</option>	
+                                        <option value="5462" data-id="bakeries">Bakeries</option>
+                                        <option value="7929" data-id="bands_orchestras">Bands, Orchestras</option>
+                                        <option value="7230" data-id="barber_and_beauty_shops">Barber and Beauty Shops</option>
+                                        <option value="7995" data-id="betting_casino_gambling">Betting/Casino Gambling</option>
+                                        <option value="5940" data-id="bicycle_shops">Bicycle Shops</option>
+                                        <option value="7932" data-id="billiard_pool_establishments">Billiard/Pool Establishments</option>
+                                        <option value="5551" data-id="boat_dealers">Boat Dealers</option>
+                                        <option value="4457" data-id="boat_rentals_and_leases">Boat Rentals and Leases</option>
+                                        <option value="5942" data-id="book_stores">Book Stores</option>
+                                        <option value="5192" data-id="books_periodicals_and_newspapers">Books, Periodicals, and Newspapers</option>
+                                        <option value="7933" data-id="bowling_alleys">Bowling Alleys</option>
+                                        <option value="4131" data-id="bus_lines">Bus Lines</option>
+                                        <option value="8244" data-id="business_secretarial_schools">Business/Secretarial Schools</option>
+                                        <option value="7278" data-id="buying_shopping_services">Buying/Shopping Services</option>
+                                        <option value="4899" data-id="cable_satellite_and_other_pay_television_and_radio">Cable, Satellite, and Other Pay Television and Radio</option>
+                                        <option value="5946" data-id="camera_and_photographic_supply_stores">Camera and Photographic Supply Stores</option>
+                                        <option value="5441" data-id="candy_nut_and_confectionery_stores">Candy, Nut, and Confectionery Stores</option>
+                                        <option value="7512" data-id="car_rental_agencies">Car Rental Agencies</option>
+                                        <option value="7542" data-id="car_washes">Car Washes</option>
+                                        <option value="5511" data-id="car_and_truck_dealers_new_used">Car and Truck Dealers (New & Used) Sales, Service, Repairs Parts and Leasing</option>
+                                        <option value="5521" data-id="car_and_truck_dealers_used_only">Car and Truck Dealers (Used Only) Sales, Service, Repairs Parts and Leasing</option>
+                                        <option value="1750" data-id="carpentry_services">Carpentry Services</option>
+                                        <option value="7217" data-id="carpet_upholstery_cleaning">Carpet/Upholstery Cleaning</option>
+                                        <option value="5811" data-id="caterers">Caterers</option>
+                                        <option value="8398" data-id="charitable_and_social_service_organizations_fundraising">Charitable and Social Service Organizations - Fundraising</option>
+                                        <option value="5169" data-id="chemicals_and_allied_products">Chemicals and Allied Products (Not Elsewhere Classified)</option>
+                                        <option value="8351" data-id="child_care_services">Child Care Services</option>
+                                        <option value="5641" data-id="childrens_and_infants_wear_stores">Childrens and Infants Wear Stores</option>
+                                        <option value="8049" data-id="chiropodists_podiatrists">Chiropodists, Podiatrists</option>
+                                        <option value="8041" data-id="chiropractors">Chiropractors</option>
+                                        <option value="5993" data-id="cigar_stores_and_stands">Cigar Stores and Stands</option>
+                                        <option value="8641" data-id="civic_social_fraternal_associations">Civic, Social, Fraternal Associations</option>
+                                        <option value="7349" data-id="cleaning_and_maintenance">Cleaning and Maintenance</option>
+                                        <option value="7296" data-id="clothing_rental">Clothing Rental</option>
+                                        <option value="8220" data-id="colleges_universities">Colleges, Universities</option>
+                                        <option value="5046" data-id="commercial_equipment">Commercial Equipment (Not Elsewhere Classified)</option>
+                                        <option value="5139" data-id="commercial_footwear">Commercial Footwear</option>
+                                        <option value="7333" data-id="commercial_photography_art_and_graphics">Commercial Photography, Art and Graphics</option>
+                                        <option value="4111" data-id="commuter_transport_and_ferries">Commuter Transport, Ferries</option>
+                                        <option value="4816" data-id="computer_network_services">Computer Network Services</option>
+                                        <option value="7372" data-id="computer_programming">Computer Programming</option>
+                                        <option value="7379" data-id="computer_repair">Computer Repair</option>
+                                        <option value="5734" data-id="computer_software_stores">Computer Software Stores</option>
+                                        <option value="5045" data-id="computers_peripherals_and_software">Computers, Peripherals, and Software</option>
+                                        <option value="1771" data-id="concrete_work_services">Concrete Work Services</option>
+                                        <option value="5039" data-id="construction_materials">Construction Materials (Not Elsewhere Classified)</option>
+                                        <option value="7392" data-id="consulting_public_relations">Consulting, Public Relations</option>
+                                        <option value="8241" data-id="correspondence_schools">Correspondence Schools</option>
+                                        <option value="5977" data-id="cosmetic_stores">Cosmetic Stores</option>
+                                        <option value="7277" data-id="counseling_services">Counseling Services</option>
+                                        <option value="7997" data-id="country_clubs">Country Clubs</option>
+                                        <option value="4215" data-id="courier_services">Courier Services</option>
+                                        <option value="9211" data-id="court_costs">Court Costs, Including Alimony and Child Support - Courts of Law</option>
+                                        <option value="7321" data-id="credit_reporting_agencies">Credit Reporting Agencies</option>
+                                        <option value="4411" data-id="cruise_lines">Cruise Lines</option>
+                                        <option value="5451" data-id="dairy_products_stores">Dairy Products Stores</option>
+                                        <option value="7911" data-id="dance_hall_studios_schools">Dance Hall, Studios, Schools</option>
+                                        <option value="7273" data-id="dating_escort_services">Dating/Escort Services</option>
+                                        <option value="8021" data-id="dentists_orthodontists">Dentists, Orthodontists</option>
+                                        <option value="5311" data-id="department_stores">Department Stores</option>
+                                        <option value="7393" data-id="detective_agencies">Detective Agencies</option>
+                                        <option value="5815" data-id="digital_goods_media">Digital Goods Media – Books, Movies, Music</option>
+                                        <option value="5817" data-id="digital_goods_applications">Digital Goods – Applications (Excludes Games)</option>
+                                        <option value="5816" data-id="digital_goods_games">Digital Goods – Games</option>
+                                        <option value="5818" data-id="digital_goods_large_volume">Digital Goods – Large Digital Goods Merchant</option>
+                                        <option value="5964" data-id="direct_marketing_catalog_merchant">Direct Marketing - Catalog Merchant</option>
+                                        <option value="5965" data-id="direct_marketing_combination_catalog_and_retail_merchant">Direct Marketing - Combination Catalog and Retail Merchant</option>
+                                        <option value="5967" data-id="direct_marketing_inbound_telemarketing">Direct Marketing - Inbound Telemarketing</option>
+                                        <option value="5960" data-id="direct_marketing_insurance_services">Direct Marketing - Insurance Services</option>
+                                        <option value="5969" data-id="direct_marketing_other">Direct Marketing - Other</option>
+                                        <option value="5966" data-id="direct_marketing_outbound_telemarketing">Direct Marketing - Outbound Telemarketing</option>
+                                        <option value="5968" data-id="direct_marketing_subscription">Direct Marketing - Subscription</option>
+                                        <option value="5962" data-id="direct_marketing_travel">Direct Marketing - Travel</option>
+                                        <option value="5310" data-id="discount_stores">Discount Stores</option>
+                                        <option value="8011" data-id="doctors">Doctors</option>
+                                        <option value="5963" data-id="door_to_door_sales">Door-To-Door Sales</option>
+                                        <option value="5714" data-id="drapery_window_covering_and_upholstery_stores">Drapery, Window Covering, and Upholstery Stores</option>
+                                        <option value="5813" data-id="drinking_places">Drinking Places</option>
+                                        <option value="5912" data-id="drug_stores_and_pharmacies">Drug Stores and Pharmacies</option>
+                                        <option value="5122" data-id="drugs_drug_proprietaries_and_druggist_sundries">Drugs, Drug Proprietaries, and Druggist Sundries</option>
+                                        <option value="7216" data-id="dry_cleaners">Dry Cleaners</option>
+                                        <option value="5099" data-id="durable_goods">Durable Goods (Not Elsewhere Classified)</option>
+                                        <option value="5309" data-id="duty_free_stores">Duty Free Stores</option>
+                                        <option value="5812" data-id="eating_places_restaurants">Eating Places, Restaurants</option>
+                                        <option value="8299" data-id="educational_services">Educational Services</option>
+                                        <option value="5997" data-id="electric_razor_stores">Electric Razor Stores</option>
+                                        <option value="5552" data-id="electric_vehicle_charging">Electric Vehicle Charging</option>
+                                        <option value="5065" data-id="electrical_parts_and_equipment">Electrical Parts and Equipment</option>
+                                        <option value="1731" data-id="electrical_services">Electrical Services</option>
+                                        <option value="7622" data-id="electronics_repair_shops">Electronics Repair Shops</option>
+                                        <option value="5732" data-id="electronics_stores">Electronics Stores</option>
+                                        <option value="8211" data-id="elementary_secondary_schools">Elementary, Secondary Schools</option>
+                                        <option value="9702" data-id="emergency_services_gcas_visa_use_only">Emergency Services (GCAS) (Visa use only)</option>
+                                        <option value="7361" data-id="employment_temp_agencies">Employment/Temp Agencies</option>
+                                        <option value="7394" data-id="equipment_rental">Equipment Rental</option>
+                                        <option value="7342" data-id="exterminating_services">Exterminating Services</option>
+                                        <option value="5651" data-id="family_clothing_stores">Family Clothing Stores</option>
+                                        <option value="5814" data-id="fast_food_restaurants">Fast Food Restaurants</option>
+                                        <option value="6012" data-id="financial_institutions">Financial Institutions</option>
+                                        <option value="9222" data-id="fines_government_administrative_entities">Fines - Government Administrative Entities</option>
+                                        <option value="5718" data-id="fireplace_fireplace_screens_and_accessories_stores">Fireplace, Fireplace Screens, and Accessories Stores</option>
+                                        <option value="5713" data-id="floor_covering_stores">Floor Covering Stores</option>
+                                        <option value="5992" data-id="florists">Florists</option>
+                                        <option value="5193" data-id="florists_supplies_nursery_stock_and_flowers">Florists Supplies, Nursery Stock, and Flowers</option>
+                                        <option value="5422" data-id="freezer_and_locker_meat_provisioners">Freezer and Locker Meat Provisioners</option>
+                                        <option value="5983" data-id="fuel_dealers_non_automotive">Fuel Dealers (Non Automotive)</option>
+                                        <option value="7261" data-id="funeral_services_crematories">Funeral Services, Crematories</option>
+                                        <option value="7641" data-id="furniture_repair_refinishing">Furniture Repair, Refinishing</option>
+                                        <option value="5712" data-id="furniture_home_furnishings_and_equipment_stores_except_appliances">Furniture, Home Furnishings, and Equipment Stores, Except Appliances</option>
+                                        <option value="5681" data-id="furriers_and_fur_shops">Furriers and Fur Shops</option>
+                                        <option value="1520" data-id="general_services">General Services</option>
+                                        <option value="5947" data-id="gift_card_novelty_and_souvenir_shops">Gift, Card, Novelty, and Souvenir Shops</option>
+                                        <option value="5231" data-id="glass_paint_and_wallpaper_stores">Glass, Paint, and Wallpaper Stores</option>
+                                        <option value="5950" data-id="glassware_crystal_stores">Glassware, Crystal Stores</option>
+                                        <option value="7992" data-id="golf_courses_public">Golf Courses - Public</option>
+                                        <option value="7801" data-id="government_licensed_online_casions_online_gambling_us_region_only">Government Licensed On-line Casinos (On-Line Gambling)(US Region only)</option>
+                                        <option value="9399" data-id="government_services">Government Services (Not Elsewhere Classified)</option>
+                                        <option value="7802" data-id="government_licensed_horse_dog_racing_us_region_only">Government-Licensed Horse/Dog Racing (US Region only)</option>
+                                        <option value="9406" data-id="government_owned_lotteries_non_us_region">Government-Owned Lotteries (Non-US region)</option>
+                                        <option value="7800" data-id="government_owned_lotteries_us_region_only">Government-Owned Lotteries (US Region only)</option>
+                                        <option value="5411" data-id="grocery_stores_supermarkets">Grocery Stores, Supermarkets</option>
+                                        <option value="5251" data-id="hardware_stores">Hardware Stores</option>
+                                        <option value="5072" data-id="hardware_equipment_and_supplies">Hardware, Equipment, and Supplies</option>
+                                        <option value="7298" data-id="health_and_beauty_spas">Health and Beauty Spas</option>
+                                        <option value="5975" data-id="hearing_aids_sales_and_supplies">Hearing Aids Sales and Supplies</option>
+                                        <option value="1711" data-id="heating_plumbing_a_c">Heating, Plumbing, A/C</option>
+                                        <option value="5945" data-id="hobby_toy_and_game_shops">Hobby, Toy, and Game Shops</option>
+                                        <option value="5200" data-id="home_supply_warehouse_stores">Home Supply Warehouse Stores</option>
+                                        <option value="8062" data-id="hospitals">Hospitals</option>
+                                        <option value="7011" data-id="hotels_motels_and_resorts">Hotels, Motels, and Resorts</option>
+                                        <option value="5722" data-id="household_appliance_stores">Household Appliance Stores</option>
+                                        <option value="5085" data-id="industrial_supplies">Industrial Supplies (Not Elsewhere Classified)</option>
+                                        <option value="7375" data-id="information_retrieval_services">Information Retrieval Services</option>
+                                        <option value="6399" data-id="insurance_default">Insurance - Default</option>
+                                        <option value="6300" data-id="insurance_underwriting_premiums">Insurance Underwriting, Premiums</option>
+                                        <option value="9950" data-id="intra_company_purchases">Intra-Company Purchases</option>
+                                        <option value="5944" data-id="jewelry_stores_watches_clocks_and_silverware_stores">Jewelry Stores, Watches, Clocks, and Silverware Stores</option>
+                                        <option value="0780" data-id="landscaping_services">Landscaping Services</option>
+                                        <option value="7211" data-id="laundries">Laundries</option>
+                                        <option value="7210" data-id="laundry_cleaning_services">Laundry, Cleaning Services</option>
+                                        <option value="8111" data-id="legal_services_attorneys">Legal Services, Attorneys</option>
+                                        <option value="5948" data-id="luggage_and_leather_goods_stores">Luggage and Leather Goods Stores</option>
+                                        <option value="5211" data-id="lumber_building_materials_stores">Lumber, Building Materials Stores</option>
+                                        <option value="6010" data-id="manual_cash_disburse">Manual Cash Disburse</option>
+                                        <option value="4468" data-id="marinas_service_and_supplies">Marinas, Service and Supplies</option>
+                                        <option value="5262" data-id="marketplaces">Marketplaces</option>
+                                        <option value="1740" data-id="masonry_stonework_and_plaster">Masonry, Stonework, and Plaster</option>
+                                        <option value="7297" data-id="massage_parlors">Massage Parlors</option>
+                                        <option value="8099" data-id="medical_services">Medical Services</option>
+                                        <option value="8071" data-id="medical_and_dental_labs">Medical and Dental Labs</option>
+                                        <option value="5047" data-id="medical_dental_ophthalmic_and_hospital_equipment_and_supplies">Medical, Dental, Ophthalmic, and Hospital Equipment and Supplies</option>
+                                        <option value="8699" data-id="membership_organizations">Membership Organizations</option>
+                                        <option value="5611" data-id="mens_and_boys_clothing_and_accessories_stores">Mens and Boys Clothing and Accessories Stores</option>
+                                        <option value="5691" data-id="mens_womens_clothing_stores">Mens, Womens Clothing Stores</option>
+                                        <option value="5051" data-id="metal_service_centers">Metal Service Centers</option>
+                                        <option value="5699" data-id="miscellaneous_apparel_and_accessory_shops">Miscellaneous Apparel and Accessory Shops</option>
+                                        <option value="5599" data-id="miscellaneous_auto_dealers">Miscellaneous Auto Dealers</option>
+                                        <option value="7399" data-id="miscellaneous_business_services">Miscellaneous Business Services</option>
+                                        <option value="5499" data-id="miscellaneous_food_stores">Miscellaneous Food Stores - Convenience Stores and Specialty Markets</option>
+                                        <option value="5399" data-id="miscellaneous_general_merchandise">Miscellaneous General Merchandise</option>
+                                        <option value="7299" data-id="miscellaneous_general_services">Miscellaneous General Services</option>
+                                        <option value="5719" data-id="miscellaneous_home_furnishing_specialty_stores">Miscellaneous Home Furnishing Specialty Stores</option>
+                                        <option value="2741" data-id="miscellaneous_publishing_and_printing">Miscellaneous Publishing and Printing</option>
+                                        <option value="7999" data-id="miscellaneous_recreation_services">Miscellaneous Recreation Services</option>
+                                        <option value="7699" data-id="miscellaneous_repair_shops">Miscellaneous Repair Shops</option>
+                                        <option value="5999" data-id="miscellaneous_specialty_retail">Miscellaneous Specialty Retail</option>
+                                        <option value="5271" data-id="mobile_home_dealers">Mobile Home Dealers</option>
+                                        <option value="7832" data-id="motion_picture_theaters">Motion Picture Theaters</option>
+                                        <option value="4214" data-id="motor_freight_carriers_and_trucking">Motor Freight Carriers and Trucking - Local and Long Distance, Moving and Storage Companies, and Local Delivery Services</option>
+                                        <option value="5592" data-id="motor_homes_dealers">Motor Homes Dealers</option>
+                                        <option value="5013" data-id="motor_vehicle_supplies_and_new_parts">Motor Vehicle Supplies and New Parts</option>
+                                        <option value="5571" data-id="motorcycle_shops_and_dealers">Motorcycle Shops and Dealers</option>
+                                        <option value="5561" data-id="motorcycle_shops_dealers">Motorcycle Shops, Dealers</option>
+                                        <option value="5733" data-id="music_stores_musical_instruments_pianos_and_sheet_music">Music Stores-Musical Instruments, Pianos, and Sheet Music</option>
+                                        <option value="5994" data-id="news_dealers_and_newsstands">News Dealers and Newsstands</option>
+                                        <option value="6051" data-id="non_fi_money_orders">Non-FI, Money Orders</option>
+                                        <option value="6540" data-id="non_fi_stored_value_card_purchase_load">Non-FI, Stored Value Card Purchase/Load</option>
+                                        <option value="5199" data-id="nondurable_goods">Nondurable Goods (Not Elsewhere Classified)</option>
+                                        <option value="5261" data-id="nurseries_lawn_and_garden_supply_stores">Nurseries, Lawn and Garden Supply Stores</option>
+                                        <option value="8050" data-id="nursing_personal_care">Nursing/Personal Care</option>
+                                        <option value="5021" data-id="office_and_commercial_furniture">Office and Commercial Furniture</option>
+                                        <option value="8043" data-id="opticians_eyeglasses">Opticians, Eyeglasses</option>
+                                        <option value="8042" data-id="optometrists_ophthalmologist">Optometrists, Ophthalmologist</option>
+                                        <option value="5976" data-id="orthopedic_goods_prosthetic_devices">Orthopedic Goods - Prosthetic Devices</option>
+                                        <option value="8031" data-id="osteopaths">Osteopaths</option>
+                                        <option value="5921" data-id="package_stores_beer_wine_and_liquor">Package Stores-Beer, Wine, and Liquor</option>
+                                        <option value="5198" data-id="paints_varnishes_and_supplies">Paints, Varnishes, and Supplies</option>
+                                        <option value="7523" data-id="parking_lots_garages">Parking Lots, Garages</option>
+                                        <option value="4112" data-id="passenger_railways">Passenger Railways</option>
+                                        <option value="5933" data-id="pawn_shops">Pawn Shops</option>
+                                        <option value="5995" data-id="pet_shops_pet_food_and_supplies">Pet Shops, Pet Food, and Supplies</option>
+                                        <option value="5172" data-id="petroleum_and_petroleum_products">Petroleum and Petroleum Products</option>
+                                        <option value="7395" data-id="photo_developing">Photo Developing</option>
+                                        <option value="7221" data-id="photographic_studios">Photographic Studios</option>
+                                        <option value="5044" data-id="photographic_photocopy_microfilm_equipment_and_supplies">Photographic, Photocopy, Microfilm Equipment, and Supplies</option>
+                                        <option value="7829" data-id="picture_video_production">Picture/Video Production</option>
+                                        <option value="5131" data-id="piece_goods_notions_and_other_dry_goods">Piece Goods, Notions, and Other Dry Goods</option>
+                                        <option value="5074" data-id="plumbing_heating_equipment_and_supplies">Plumbing, Heating Equipment, and Supplies</option>
+                                        <option value="8651" data-id="political_organizations">Political Organizations</option>
+                                        <option value="9402" data-id="postal_services_government_only">Postal Services - Government Only</option>
+                                        <option value="5094" data-id="precious_stones_and_metals_watches_and_jewelry">Precious Stones and Metals, Watches and Jewelry</option>
+                                        <option value="8999" data-id="professional_services">Professional Services</option>
+                                        <option value="4225" data-id="public_warehousing_and_storage">Public Warehousing and Storage - Farm Products, Refrigerated Goods, Household Goods, and Storage</option>       	
+                                        <option value="7338" data-id="quick_copy_repro_and_blueprint">Quick Copy, Repro, and Blueprint</option>
+                                        <option value="4011" data-id="railroads">Railroads</option>
+                                        <option value="6513" data-id="real_estate_agents_and_managers_rentals">Real Estate Agents and Managers - Rentals</option>
+                                        <option value="5735" data-id="record_stores">Record Stores</option>
+                                        <option value="7519" data-id="recreational_vehicle_rentals">Recreational Vehicle Rentals</option>
+                                        <option value="5973" data-id="religious_goods_stores">Religious Goods Stores</option>
+                                        <option value="8661" data-id="religious_organizations">Religious Organizations</option>
+                                        <option value="1761" data-id="roofing_siding_sheet_metal">Roofing/Siding, Sheet Metal</option>
+                                        <option value="7339" data-id="secretarial_support_services">Secretarial Support Services</option>
+                                        <option value="6211" data-id="security_brokers_dealers">Security Brokers/Dealers</option>
+                                        <option value="5541" data-id="service_stations">Service Stations</option>
+                                        <option value="5949" data-id="sewing_needlework_fabric_and_piece_goods_stores">Sewing, Needlework, Fabric, and Piece Goods Stores</option>
+                                        <option value="7251" data-id="shoe_repair_hat_cleaning">Shoe Repair/Hat Cleaning</option>
+                                        <option value="5661" data-id="shoe_stores">Shoe Stores</option>
+                                        <option value="7629" data-id="small_appliance_repair">Small Appliance Repair</option>
+                                        <option value="5598" data-id="snowmobile_dealers">Snowmobile Dealers</option>
+                                        <option value="1799" data-id="special_trade_services">Special Trade Services</option>
+                                        <option value="2842" data-id="specialty_cleaning">Specialty Cleaning</option>
+                                        <option value="5941" data-id="sporting_goods_stores">Sporting Goods Stores</option>
+                                        <option value="7032" data-id="sporting_recreation_camps">Sporting/Recreation Camps</option>
+                                        <option value="7941" data-id="sports_clubs_fields">Sports Clubs/Fields</option>
+                                        <option value="5655" data-id="sports_and_riding_apparel_stores">Sports and Riding Apparel Stores</option>
+                                        <option value="5972" data-id="stamp_and_coin_stores">Stamp and Coin Stores</option>
+                                        <option value="5111" data-id="stationary_office_supplies_printing_and_writing_paper">Stationary, Office Supplies, Printing and Writing Paper</option>
+                                        <option value="5943" data-id="stationery_stores_office_and_school_supply_stores">Stationery Stores, Office, and School Supply Stores</option>
+                                        <option value="5996" data-id="swimming_pools_sales">Swimming Pools Sales</option>
+                                        <option value="4723" data-id="t_ui_travel_germany">TUI Travel - Germany</option>
+                                        <option value="5697" data-id="tailors_alterations">Tailors, Alterations</option>
+                                        <option value="9311" data-id="tax_payments_government_agencies">Tax Payments - Government Agencies</option>
+                                        <option value="7276" data-id="tax_preparation_services">Tax Preparation Services</option>
+                                        <option value="4121" data-id="taxicabs_limousines">Taxicabs/Limousines</option>
+                                        <option value="4812" data-id="telecommunication_equipment_and_telephone_sales">Telecommunication Equipment and Telephone Sales</option>
+                                        <option value="4814" data-id="telecommunication_services">Telecommunication Services</option>
+                                        <option value="4821" data-id="telegraph_services">Telegraph Services</option>
+                                        <option value="5998" data-id="tent_and_awning_shops">Tent and Awning Shops</option>
+                                        <option value="8734" data-id="testing_laboratories">Testing Laboratories</option>
+                                        <option value="7922" data-id="theatrical_ticket_agencies">Theatrical Ticket Agencies</option>
+                                        <option value="7012" data-id="timeshares">Timeshares</option>
+                                        <option value="7534" data-id="tire_retreading_and_repair">Tire Retreading and Repair</option>
+                                        <option value="4784" data-id="tolls_bridge_fees">Tolls/Bridge Fees</option>
+                                        <option value="7991" data-id="tourist_attractions_and_exhibits">Tourist Attractions and Exhibits</option>
+                                        <option value="7549" data-id="towing_services">Towing Services</option>
+                                        <option value="7033" data-id="trailer_parks_campgrounds">Trailer Parks, Campgrounds</option>
+                                        <option value="4789" data-id="transportation_services">Transportation Services (Not Elsewhere Classified)</option>
+                                        <option value="4722" data-id="travel_agencies_tour_operators">Travel Agencies, Tour Operators</option>
+                                        <option value="7511" data-id="truck_stop_iteration">Truck StopIteration</option>
+                                        <option value="7513" data-id="truck_utility_trailer_rentals">Truck/Utility Trailer Rentals</option>
+                                        <option value="2791" data-id="typesetting_plate_making_and_related_services">Typesetting, Plate Making, and Related Services</option>
+                                        <option value="5978" data-id="typewriter_stores">Typewriter Stores</option>
+                                        <option value="9405" data-id="u_s_federal_government_agencies_or_departments">U.S. Federal Government Agencies or Departments</option>
+                                        <option value="5137" data-id="uniforms_commercial_clothing">Uniforms, Commercial Clothing</option>
+                                        <option value="5931" data-id="used_merchandise_and_secondhand_stores">Used Merchandise and Secondhand Stores</option>
+                                        <option value="4900" data-id="utilities">Utilities</option>
+                                        <option value="5331" data-id="variety_stores">Variety Stores</option>
+                                        <option value="0742" data-id="veterinary_services">Veterinary Services</option>
+                                        <option value="7993" data-id="video_amusement_game_supplies">Video Amusement Game Supplies</option>
+                                        <option value="7994" data-id="video_game_arcades">Video Game Arcades</option>
+                                        <option value="7841" data-id="video_tape_rental_stores">Video Tape Rental Stores</option>
+                                        <option value="8249" data-id="vocational_trade_schools">Vocational/Trade Schools</option>
+                                        <option value="7631" data-id="watch_jewelry_repair">Watch/Jewelry Repair</option>
+                                        <option value="7692" data-id="welding_repair">Welding Repair</option>
+                                        <option value="5300" data-id="wholesale_clubs">Wholesale Clubs</option>
+                                        <option value="5698" data-id="wig_and_toupee_stores">Wig and Toupee Stores</option>
+                                        <option value="4829" data-id="wires_money_orders">Wires, Money Orders</option>
+                                        <option value="5631" data-id="womens_accessory_and_specialty_shops">Womens Accessory and Specialty Shops</option>
+                                        <option value="5621" data-id="womens_ready_to_wear_stores">Womens Ready-To-Wear Stores</option>
+                                        <option value="5935" data-id="wrecking_and_salvage_yards">Wrecking and Salvage Yards</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -1160,6 +1470,7 @@ require('./renderer.js');
     </script>
 
     <script src="https://js.stripe.com/v3/" async></script>
+    <script src="https://js.stripe.com/terminal/v1/"></script>
     <script src="assets/plugins/bootstrap/bootstrap.min.js"></script>
     <script src="assets/plugins/chosen/chosen.jquery.min.js"></script>
     <script src="assets/plugins/jquery-ui/jquery.form.min.js"></script>

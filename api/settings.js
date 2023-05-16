@@ -95,6 +95,7 @@ app.post( "/post", upload.single('imagename'), function ( req, res ) {
             "footer": req.body.footer,
             "img": image,
             "stripe": {
+                "category": req.body.stripemcc,
                 "live": (req.body.stripestatus ? true : false),
                 "publishable": {
                     "live": req.body.stripelivepublishable,
@@ -105,7 +106,10 @@ app.post( "/post", upload.single('imagename'), function ( req, res ) {
                     "test": req.body.stripetestsecret
                 },
                 "terminal": {
-                    "locationid": req.body.stripeterminallocationid
+                    "locationid": {
+                        "live": req.body.stripeterminallivelocationid,
+                        "test": req.body.stripeterminaltestlocationid
+                    }
                 }
             }
         }       
